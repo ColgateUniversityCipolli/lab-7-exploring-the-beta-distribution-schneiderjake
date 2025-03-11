@@ -223,7 +223,7 @@ beta.sample <- rbeta(n = sample.size, # sample size
 
 
 hist.den.1 <- ggplot(data.frame(x = beta.sample), aes(x = x)) +
-  geom_histogram(aes(y = ..density..), bins = 25, fill = "lightblue", color = "black", alpha = 0.7) +
+  geom_histogram(aes(y = after_stat(density)), bins = 25, fill = "lightblue", color = "black", alpha = 0.7) +
   
   geom_density(aes(color = "Our Estimated Density Function"), size = 1) +  
   
@@ -264,7 +264,7 @@ beta.sample <- rbeta(n = sample.size, # sample size
 
 
 hist.den.2 <- ggplot(data.frame(x = beta.sample), aes(x = x)) +
-  geom_histogram(aes(y = ..density..), bins = 25, fill = "lightblue", color = "black", alpha = 0.7) +
+  geom_histogram(aes(y = after_stat(density)), bins = 25, fill = "lightblue", color = "black", alpha = 0.7) +
   
   geom_density(aes(color = "Our Estimated Density Function"), size = 1) +  
   
@@ -302,7 +302,7 @@ beta.sample <- rbeta(n = sample.size, # sample size
 
 
 hist.den.3 <- ggplot(data.frame(x = beta.sample), aes(x = x)) +
-  geom_histogram(aes(y = ..density..), bins = 25, fill = "lightblue", color = "black", alpha = 0.7) +
+  geom_histogram(aes(y = after_stat(density)), bins = 25, fill = "lightblue", color = "black", alpha = 0.7) +
   
   geom_density(aes(color = "Our Estimated Density Function"), size = 1) +  
   
@@ -341,7 +341,7 @@ beta.sample <- rbeta(n = sample.size, # sample size
 
 
 hist.den.4 <- ggplot(data.frame(x = beta.sample), aes(x = x)) +
-  geom_histogram(aes(y = ..density..), bins = 25, fill = "lightblue", color = "black", alpha = 0.7) +
+  geom_histogram(aes(y = after_stat(density)), bins = 25, fill = "lightblue", color = "black", alpha = 0.7) +
   
   geom_density(aes(color = "Our Estimated Density Function"), size = 1) +  
   
@@ -376,7 +376,7 @@ combined.summary.stats <- summary.stats.1 |>
   select(Alpha, Beta, sample.mean, sample.var, sample.skew, sample.exc.kurt)
 
 
-     #############plot a histogram for each example
+    
   
   
 ##############################################################################################
@@ -520,25 +520,25 @@ for(i in 1:1000){
 
 #Mean Distribution
 ggplot(sampling.distribution.table, aes(x = Mean)) +
-  geom_histogram(aes(y = ..density..), bins = 30, fill = "blue", alpha = 0.6) +
+  geom_histogram(aes(y = after_stat(density)), bins = 30, fill = "blue", alpha = 0.6) +
   geom_density(color = "red", linewidth = 1) +
   labs(title = "Sampling Distribution of Sample Mean", x = "Sample Mean", y = "Density")
 
 #Variance Distribution
 ggplot(sampling.distribution.table, aes(x = Variance)) +
-  geom_histogram(aes(y = ..density..), bins = 30, fill = "green", alpha = 0.6) +
+  geom_histogram(aes(y = after_stat(density)), bins = 30, fill = "green", alpha = 0.6) +
   geom_density(color = "red", linewidth = 1) +
   labs(title = "Sampling Distribution of Sample Variance", x = "Sample Variance", y = "Density")
 
 #Skewness Distribution
 ggplot(sampling.distribution.table, aes(x = Skewness)) +
-  geom_histogram(aes(y = ..density..), bins = 30, fill = "purple", alpha = 0.6) +
+  geom_histogram(aes(y = after_stat(density)), bins = 30, fill = "purple", alpha = 0.6) +
   geom_density(color = "red", linewidth = 1) +
   labs(title = "Sampling Distribution of Sample Skewness", x = "Sample Skewness", y = "Density")
 
 #Kurtosis Distribution
 ggplot(sampling.distribution.table, aes(x = `Excess Kurtosis`)) +
-  geom_histogram(aes(y = ..density..), bins = 30, fill = "orange", alpha = 0.6) +
+  geom_histogram(aes(y = after_stat(density)), bins = 30, fill = "orange", alpha = 0.6) +
   geom_density(color = "red", linewidth = 1) +
   labs(title = "Sampling Distribution of Sample Kurtosis", x = "Sample Kurtosis", y = "Density")
 
