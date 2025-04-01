@@ -6,6 +6,7 @@ library(tidyverse)
 library(ggplot2)
 library(e1071)
 library(patchwork)
+library(xtable)
 
 
 
@@ -114,6 +115,7 @@ plot.alpha0.5.beta0.5 <- ggplot(data= q1.fig.dat)+
 combine.betas <- (plot.alpha2.beta5 + plot.alpha5.beta5)/
   (plot.alpha5.beta2 + plot.alpha0.5.beta0.5)
 
+ggsave("varying.beta.distributions.pdf", plot = combine.betas, width = 10, height = 6)
 
 #########################################################
 #for loop to get all of population level values in a table
@@ -367,13 +369,21 @@ summary.stats.4 <- tibble(beta.sample) |>
 
 ###########################################
 #table for n=500 beta distributions
-  
-combined.summary.stats <- summary.stats.1 |>
-  merge(summary.stats.2, all=T)|>
-  merge(summary.stats.3, all=T)|>
-  merge(summary.stats.4, all=T)|>
-  mutate(Alpha = alpha.values, Beta = beta.values) |>
-  select(Alpha, Beta, sample.mean, sample.var, sample.skew, sample.exc.kurt)
+
+#add identifying columns to each summary
+summary.stats.1 <- summary.stats.1 |> mutate(Alpha = 2, Beta = 5)
+summary.stats.2 <- summary.stats.2 |> mutate(Alpha = 5, Beta = 5)
+summary.stats.3 <- summary.stats.3 |> mutate(Alpha = 5, Beta = 2)
+summary.stats.4 <- summary.stats.4 |> mutate(Alpha = 0.5, Beta = 0.5)
+
+#combine them efficiently using bind_rows()
+combined.summary.stats <- bind_rows(
+  summary.stats.1,
+  summary.stats.2,
+  summary.stats.3,
+  summary.stats.4
+) |> 
+  select(Alpha, Beta, everything())  #reorder to read easier 
 
 
     
@@ -490,6 +500,9 @@ sim.og.cum.kurt.plot <- og.cum.kurt.plot +
 combined.sim.og.plots <- (sim.og.cum.mean.plot | sim.og.cum.var.plot)/
   (sim.og.cum.skew.plot | sim.og.cum.kurt.plot)
 
+ggsave("convergence.plots.pdf", plot = combined.sim.og.plots, width = 10, height = 65)
+
+
 ##############################################################################################
 ##############################################################################################
 #Task 5
@@ -519,31 +532,33 @@ for(i in 1:1000){
 }
 
 #Mean Distribution
-ggplot(sampling.distribution.table, aes(x = Mean)) +
+mean.variation <- ggplot(sampling.distribution.table, aes(x = Mean)) +
   geom_histogram(aes(y = after_stat(density)), bins = 30, fill = "blue", alpha = 0.6) +
   geom_density(color = "red", linewidth = 1) +
   labs(title = "Sampling Distribution of Sample Mean", x = "Sample Mean", y = "Density")
 
 #Variance Distribution
-ggplot(sampling.distribution.table, aes(x = Variance)) +
+variance.variation <- ggplot(sampling.distribution.table, aes(x = Variance)) +
   geom_histogram(aes(y = after_stat(density)), bins = 30, fill = "green", alpha = 0.6) +
   geom_density(color = "red", linewidth = 1) +
   labs(title = "Sampling Distribution of Sample Variance", x = "Sample Variance", y = "Density")
 
 #Skewness Distribution
-ggplot(sampling.distribution.table, aes(x = Skewness)) +
+skewness.variation <- ggplot(sampling.distribution.table, aes(x = Skewness)) +
   geom_histogram(aes(y = after_stat(density)), bins = 30, fill = "purple", alpha = 0.6) +
   geom_density(color = "red", linewidth = 1) +
   labs(title = "Sampling Distribution of Sample Skewness", x = "Sample Skewness", y = "Density")
 
 #Kurtosis Distribution
-ggplot(sampling.distribution.table, aes(x = `Excess Kurtosis`)) +
+kurtosis.variation <- ggplot(sampling.distribution.table, aes(x = `Excess Kurtosis`)) +
   geom_histogram(aes(y = after_stat(density)), bins = 30, fill = "orange", alpha = 0.6) +
   geom_density(color = "red", linewidth = 1) +
   labs(title = "Sampling Distribution of Sample Kurtosis", x = "Sample Kurtosis", y = "Density")
 
+variation.distributions <- (mean.variation + variance.variation)/
+  (skewness.variation + kurtosis.variation)
 
-
+ggsave("variation.distributions.pdf", plot = variation.distributions, width = 10, height = 5)
 
 
 
