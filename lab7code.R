@@ -8,8 +8,6 @@ library(e1071)
 library(patchwork)
 library(xtable)
 
-
-
 ##################################################################################
 ##################################################################################
 #task one
@@ -113,17 +111,16 @@ plot.alpha0.5.beta0.5 <- ggplot(data= q1.fig.dat)+
 #use patchworks to patch the plots together
 
 combine.betas <- (plot.alpha2.beta5 + plot.alpha5.beta5)/
-  (plot.alpha5.beta2 + plot.alpha0.5.beta0.5)
+  (plot.alpha5.beta2 + plot.alpha0.5.beta0.5) #combine the 4 beta distributions together
 
 ggsave("varying.beta.distributions.pdf", plot = combine.betas, width = 10, height = 6)
 
 #########################################################
-#for loop to get all of population level values in a table
-#table for population level beta 
-
+#use for loop to get all of population level values in a table
+ 
 alpha.values <- c(2, 5, 5, .5)
 beta.values  <- c(5, 5, 2, .5)
-
+#table for population level beta
 pop.lvl.stats <- tibble(
   Alpha = numeric(),
   Beta = numeric(),
@@ -132,7 +129,7 @@ pop.lvl.stats <- tibble(
   Skewness = numeric(),
   `Excess Kurtosis` = numeric()
 )
-
+#for loop that gathers all of our population level statistics for the 4 cases
 for(i in 1:4){
 alpha <- alpha.values[i]
 beta <- beta.values[i]
@@ -156,7 +153,7 @@ pop.lvl.stats[i, ] <- tibble(Alpha = alpha, Beta = beta, Mean = mean.value,
 #task two
 ##############################################################################################
 ##############################################################################################
-
+#function for our moments that integrates 
 beta.moment <- function(alpha, beta, k, centered = F){
   mean.x <- alpha/(alpha+beta)
   
@@ -174,9 +171,7 @@ beta.moment <- function(alpha, beta, k, centered = F){
 }
 
 
-
-#need to make a function that takes the beta moment
-
+#empty tibble to store our moments data
 beta.moments.table <- tibble(
   Alpha = numeric(),
   Beta = numeric(),
@@ -186,6 +181,7 @@ beta.moments.table <- tibble(
   `Excess Kurtosis` = numeric()
 )
 
+#for loop to compute our beta moments statistics  
 for(i in 1:4){
   alpha <- alpha.values[i]
   beta <- beta.values[i]
@@ -376,7 +372,7 @@ summary.stats.2 <- summary.stats.2 |> mutate(Alpha = 5, Beta = 5)
 summary.stats.3 <- summary.stats.3 |> mutate(Alpha = 5, Beta = 2)
 summary.stats.4 <- summary.stats.4 |> mutate(Alpha = 0.5, Beta = 0.5)
 
-#combine them efficiently using bind_rows()
+#combine all the data so they are on one table
 combined.summary.stats <- bind_rows(
   summary.stats.1,
   summary.stats.2,
@@ -508,11 +504,11 @@ ggsave("convergence.plots.pdf", plot = combined.sim.og.plots, width = 10, height
 #Task 5
 ##############################################################################################
 ##############################################################################################
-
+#unload cumstats package so that we can use our prior packages 
 detach("package:cumstats", unload = T)
 
 sampling.distribution.table <- tibble()
-
+#for loop to simulate our new data 
 for(i in 1:1000){
   set.seed(7272+i)
   

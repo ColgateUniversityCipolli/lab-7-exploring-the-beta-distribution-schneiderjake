@@ -10,7 +10,7 @@ library(nleqslv)
 ################################################################################
 
 cntry.dth.rts <- read_csv("API_SP.DYN.CDRT.IN_DS2_en_csv_v2_76451.csv")
-
+#select only the infomration that we need from the data 
 cntry.dth.rts <- cntry.dth.rts |>
   select("Country Name", "Country Code", "2022")|>
   mutate(`2022` = `2022` / 1000)
@@ -118,7 +118,7 @@ p1 <- ggplot(all.estimates.long |>
                filter(Method == "MOM", Parameter == "alpha"), 
              aes(x = value)) +
   geom_density(fill = "blue", alpha = 0.4) +
-  labs(title = "MOM α Estimates", x = "Estimated α", y = "Density") +
+  labs(title = "MOM Alpha Estimates", x = "Estimated Alpha", y = "Density") +
   theme_minimal()
 
 #Plot 2: MOM Beta Estimates
@@ -126,7 +126,7 @@ p2 <- ggplot(all.estimates.long |>
                filter(Method == "MOM", Parameter == "beta"), 
              aes(x = value)) +
   geom_density(fill = "blue", alpha = 0.4) +
-  labs(title = "MOM β Estimates", x = "Estimated β", y = "Density") +
+  labs(title = "MOM Beta Estimates", x = "Estimated Beta", y = "Density") +
   theme_minimal()
 
 #Plot 3: MLE Alpha Estimates
@@ -134,7 +134,7 @@ p3 <- ggplot(all.estimates.long |>
                filter(Method == "MLE", Parameter == "alpha"), 
              aes(x = value)) +
   geom_density(fill = "red", alpha = 0.4) +
-  labs(title = "MLE α Estimates", x = "Estimated α", y = "Density") +
+  labs(title = "MLE Alpha Estimates", x = "Estimated Alpha", y = "Density") +
   theme_minimal()
 
 #Plot 4: MLE Beta Estimates
@@ -142,7 +142,7 @@ p4 <- ggplot(all.estimates.long |>
                filter(Method == "MLE", Parameter == "beta"), 
              aes(x = value)) +
   geom_density(fill = "red", alpha = 0.4) +
-  labs(title = "MLE β Estimates", x = "Estimated β", y = "Density") +
+  labs(title = "MLE Beta Estimates", x = "Estimated Beta", y = "Density") +
   theme_minimal()
 
 
